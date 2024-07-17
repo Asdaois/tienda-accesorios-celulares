@@ -21,20 +21,141 @@
   </header>
   <section id="page-banner">
     <div class="">
-      <h1>Inicio</h1>
+      <h1>Carrito</h1>
       <div class="breadcrumbs">
         <span>
           <a href="/index.html">Inicio /</a>
         </span>
-        <span>Carrito</span> 
+        <span>Carrito</span>
       </div>
     </div>
   </section>
-  
-  <footer>
 
+  <main class="container">
+    <section id="cart-resume">
+      <h5 class="">Subtotal (<span class="cart-amount">0</span> productos): <span id="cart-to-pay">$000</span></h5>
+    </section>
+
+    <h4>Productos en el Carrito</h4>
+    <section id="cart-items">
+      <template id="producto-carrito-template">
+        <article class="producto-carrito">
+          <div class="producto-imagen">
+            <img src="/productos_imagenes/1.png" alt="">
+          </div>
+          <div class="producto-carrito-detalles">
+            <h5>Producto nombre</h5>
+            <button class="circle minus" aria-label="Decrease quantity" aria-disabled="false">
+              -
+            </button>
+            <span class="cart-amount">0</span>
+            <button class="circle plus" aria-label="Decrease quantity" aria-disabled="false">
+              +
+            </button>
+
+            <button class="eliminar">Eliminar</button>
+          </div>
+
+          <div class="precio">
+            <h3 class="producto-carrito-precio">
+              $000
+            </h3>
+          </div>
+        </article>
+      </template>
+    </section>
+  </main>
+  <footer>
   </footer>
   <script type="module" src="/main.js"></script>
+  <script src="/scripts/datos.js"></script>
+  <script>
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    const CART_PRODUCT_TEMPLATE = document.querySelector("#producto-carrito-template")
+    const cartItems = document.querySelector("#cart-items")
+
+    let numeroProductos = 0
+    let subTotal = 0
+
+    generarVistaCarrito()
+
+    function generarVistaCarrito() {
+      cartItems.innerHTML = null
+      numeroProductos = 0
+      subTotal = 0
+      for (let item in cart) {
+        if (cart[item] !== 0) {
+          numeroProductos++;
+          let clone = CART_PRODUCT_TEMPLATE.content.cloneNode(true);
+          clone.querySelector('img').src = "/productos_imagenes/" + PRODUCTOS[item].id + '.png'
+          clone.querySelector('h5').textContent = PRODUCTOS[item].nombre
+          clone.querySelector('.cart-amount').textContent = cart[item]
+
+          clone.querySelector('.minus').addEventListener('click', () => {
+            cart[item] -= 1
+            generarVistaCarrito()
+            localStorage.setItem('cart', JSON.stringify(cart))
+          })
+
+          clone.querySelector('.plus').addEventListener('click', () => {
+            cart[item] += 1
+            generarVistaCarrito()
+            localStorage.setItem('cart', JSON.stringify(cart))
+          })
+
+          clone.querySelector('.eliminar').addEventListener('click', () => {
+            cart[item] = 0
+            generarVistaCarrito()
+            localStorage.setItem('cart', JSON.stringify(cart))
+          })
+
+          let precio = Number(PRODUCTOS[item].precio) * cart[item]
+          subTotal += precio
+
+          clone.querySelector('.producto-carrito-precio').textContent = "$" + precio.toFixed(2)
+
+          cartItems.appendChild(clone)
+        }
+      }
+
+      document.querySelector('.cart-amount').textContent = numeroProductos
+      document.querySelector('#cart-to-pay').textContent = "$" + subTotal.toFixed(2)
+    }
+
+  </script>
 </body>
+
+<style>
+  main {
+    padding: 36px;
+  }
+
+  .producto-carrito {
+    box-sizing: border-box;
+    display: flex;
+    height: 216px;
+    width: 100%;
+    padding: 24px 0px;
+    gap: 16px;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .producto-carrito img {
+    height: 160px;
+    width: 160px;
+    object-fit: contain;
+  }
+
+  .producto-carrito-detalles {
+    flex-grow: 1;
+  }
+
+  .producto-carrito .precio {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
 
 </html>
