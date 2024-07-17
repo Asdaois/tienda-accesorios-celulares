@@ -1,0 +1,7 @@
+- [ ] Inicio Botón de inicio, o puedes tener otro que hable de ti, tipo Quién soy que cuentes sobre qué trabajos realizados y demás. 
+- [ ] Carrito 🛒 
+- [ ] Método de Pago: Yappy, ACH, Punto Pago. 
+- [ ] Categorías: Por ejemplo tienes de productos, ya sea covers, cargadores, protectores de pantalla. 
+- [ ] Cotización: Que el cliente pueda poner sus datos y tu le envíes la cotización 
+- [ ] Botón de búsqueda: Que el cliente pueda poner lo que busca es una forma rápida 
+- [ ] Contáctame: Aquí pones un acceso para que te puedan chatear por Whatsapp o tu número de teléfono para llamadas

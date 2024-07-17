@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./styles/style.css">
+  <link rel="stylesheet" href="./styles/productos.css">
+  <title>Todo Teléfono - Inicio</title>
+</head>
+
+<body style="min-height: 100vh;">
+  <header class="container" id="header-principal">
+    <div class="logo">Todo Telefono</div>
+    <nav id="header-pages">
+      <a href="/index.html">Inicio</a>
+      <a href="/contactenos.html">Contáctenos</a>
+      <a href="/productos.html" class="active">Productos</a>
+      <a href="/carrito.html">Carrito</a>
+    </nav>
+  </header>
+  <section id="page-banner">
+    <h1>Productos</h1>
+    <div class="breadcrumbs">
+      <span>
+        <a href="/index.html">Inicio /</a>
+      </span>
+      <span>Productos</span>
+    </div>
+  </section>
+
+  <body class="container">
+    <div id="categorias-selector">
+    </div>
+    <div id="lista-productos" class="">
+      <template id="product-template">
+        <div class="product-item">
+          <div class="image-holder">
+            <img src="/productos_imagenes/1.png" alt="Books" class="product-image">
+          </div>
+          <div class="cart-concern">
+            <div class="cart-button d-flex justify-content-between align-items-center">
+              <button type="button" class="btn-wrap cart-link d-flex align-items-center">
+                Agregar al Carrito
+              </button>
+
+            </div>
+          </div>
+          <div class="product-detail" data-cat="1">
+            <h3 class="product-title">
+              <a>Producto PRoducoteu sateuhsaouhP Pro</a>
+            </h3>
+            <div class="item-price text-primary">$35.00</div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </body>
+  <footer>
+
+  </footer>
+  <script type="module" src="/main.js"></script>
+  <script src="/scripts/datos.js"></script>
+  <script>
+    const categoriasSelector = document.querySelector('#categorias-selector')
+    const listaProductos = document.querySelector('#lista-productos')
+    const categoriasEscogidas = {}
+
+    CATEGORIAS.forEach((categoria) => {
+      categoriasEscogidas[categoria.id] = false
+      if (categoria.id === 0)
+        categoriasEscogidas[categoria.id] = true
+      const element = document.createElement("div");
+      element.innerHTML = categoria.nombre
+      element.classList.add("cs")
+      if (categoria.id === 0) {
+        element.classList.add("active-cs")
+      }
+
+      element.addEventListener("click", () => {
+        const categoriasElement = categoriasSelector.children
+
+        if (categoria.id === 0) {
+          for (let i = 0; i < categoriasElement.length; i++) {
+            if (i === 0) {
+              categoriasElement[i].classList.add("active-cs")
+              categoriasEscogidas[i] = true
+            } else {
+              categoriasEscogidas[i] = false
+              categoriasElement[i].classList.remove("active-cs")
+            }
+          }
+        } else {
+          categoriasEscogidas[0] = false
+          categoriasElement[0].classList.remove("active-cs")
+
+          categoriasEscogidas[categoria.id] = !categoriasEscogidas[categoria.id]
+          element.classList.toggle("active-cs");
+        }
+
+        actualizarProductos();
+      })
+
+      categoriasSelector.appendChild(element)
+    })
+
+
+
+    const PRODUCTO_TEMPLATE = document.getElementById("product-template")
+
+    function crearProducto(producto) {
+      let clone = PRODUCTO_TEMPLATE.content.cloneNode(true);
+
+      clone.querySelector("a").textContent = producto.nombre
+      clone.querySelector(".item-price").textContent = "US$" + producto.precio
+      clone.querySelector(".product-detail").dataset.cat = producto.categoria
+      clone.querySelector("img").src = "/productos_imagenes/" + producto.id + ".png"
+
+      const elem = listaProductos.appendChild(clone);
+    }
+
+    PRODUCTOS.forEach((producto) => {
+      crearProducto(producto);
+    })
+
+
+    actualizarProductos();
+
+    function actualizarProductos() {
+      let selectedCategories = 0;
+
+      if (categoriasEscogidas[0] === true) {
+        for (let i = 1; i < listaProductos.children.length; i++) {
+          listaProductos.children[i].classList.remove('hide');
+        }
+      } else {
+        for (categoria in categoriasEscogidas) {
+          let productos = listaProductos.querySelectorAll("[data-cat=\"" + categoria + "\"]")
+
+          if (productos.length === 0) continue;
+
+          for (let i = 0; i < productos.length; i++) {
+            const producto = productos[i];
+
+            if (categoriasEscogidas[+categoria] === false) {
+              producto.parentElement.classList.add('hide')
+            } else {
+              producto.parentElement.classList.remove('hide')
+              selectedCategories++;
+            }
+          }
+        }
+      }
+
+      if (selectedCategories === 0) {
+        for (let i = 1; i < listaProductos.children.length; i++) {
+          listaProductos.children[i].classList.remove('hide');
+        }
+        categoriasEscogidas[0] = true;
+      }
+    }
+
+
+  </script>
+</body>
+
+</html>
