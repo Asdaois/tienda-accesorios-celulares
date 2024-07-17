@@ -30,9 +30,13 @@
     </div>
   </section>
 
-  <body class="container">
-    <div id="categorias-selector">
+  <div class="container" id="shop">
+    <div class="categorias-sidebar">
+      <h3>Categorias</h3>
+      <div id="categorias-selector">
+      </div>
     </div>
+
     <div id="lista-productos" class="">
       <template id="product-template">
         <div class="product-item">
@@ -44,7 +48,6 @@
               <button type="button" class="btn-wrap cart-link d-flex align-items-center">
                 Agregar al Carrito
               </button>
-
             </div>
           </div>
           <div class="product-detail" data-cat="1">
@@ -56,113 +59,130 @@
         </div>
       </template>
     </div>
-  </body>
-  <footer>
+    <div />
+    <footer>
 
-  </footer>
-  <script type="module" src="/main.js"></script>
-  <script src="/scripts/datos.js"></script>
-  <script>
-    const categoriasSelector = document.querySelector('#categorias-selector')
-    const listaProductos = document.querySelector('#lista-productos')
-    const categoriasEscogidas = {}
+    </footer>
+    <script type="module" src="/main.js"></script>
+    <script src="/scripts/datos.js"></script>
+    <script>
+      const categoriasSelector = document.querySelector('#categorias-selector')
+      const listaProductos = document.querySelector('#lista-productos')
+      const categoriasEscogidas = {}
 
-    CATEGORIAS.forEach((categoria) => {
-      categoriasEscogidas[categoria.id] = false
-      if (categoria.id === 0)
-        categoriasEscogidas[categoria.id] = true
-      const element = document.createElement("div");
-      element.innerHTML = categoria.nombre
-      element.classList.add("cs")
-      if (categoria.id === 0) {
-        element.classList.add("active-cs")
-      }
-
-      element.addEventListener("click", () => {
-        const categoriasElement = categoriasSelector.children
-
+      CATEGORIAS.forEach((categoria) => {
+        categoriasEscogidas[categoria.id] = false
+        if (categoria.id === 0)
+          categoriasEscogidas[categoria.id] = true
+        const element = document.createElement("div");
+        element.innerHTML = categoria.nombre
+        element.classList.add("cs")
         if (categoria.id === 0) {
-          for (let i = 0; i < categoriasElement.length; i++) {
-            if (i === 0) {
-              categoriasElement[i].classList.add("active-cs")
-              categoriasEscogidas[i] = true
-            } else {
-              categoriasEscogidas[i] = false
-              categoriasElement[i].classList.remove("active-cs")
-            }
-          }
-        } else {
-          categoriasEscogidas[0] = false
-          categoriasElement[0].classList.remove("active-cs")
-
-          categoriasEscogidas[categoria.id] = !categoriasEscogidas[categoria.id]
-          element.classList.toggle("active-cs");
+          element.classList.add("active-cs")
         }
 
-        actualizarProductos();
+        element.addEventListener("click", () => {
+          const categoriasElement = categoriasSelector.children
+
+          if (categoria.id === 0) {
+            for (let i = 0; i < categoriasElement.length; i++) {
+              if (i === 0) {
+                categoriasElement[i].classList.add("active-cs")
+                categoriasEscogidas[i] = true
+              } else {
+                categoriasEscogidas[i] = false
+                categoriasElement[i].classList.remove("active-cs")
+              }
+            }
+          } else {
+            categoriasEscogidas[0] = false
+            categoriasElement[0].classList.remove("active-cs")
+
+            categoriasEscogidas[categoria.id] = !categoriasEscogidas[categoria.id]
+            element.classList.toggle("active-cs");
+          }
+
+          actualizarProductos();
+        })
+
+        categoriasSelector.appendChild(element)
       })
 
-      categoriasSelector.appendChild(element)
-    })
 
 
+      const PRODUCTO_TEMPLATE = document.getElementById("product-template")
 
-    const PRODUCTO_TEMPLATE = document.getElementById("product-template")
+      function crearProducto(producto) {
+        let clone = PRODUCTO_TEMPLATE.content.cloneNode(true);
 
-    function crearProducto(producto) {
-      let clone = PRODUCTO_TEMPLATE.content.cloneNode(true);
+        clone.querySelector("a").textContent = producto.nombre
+        clone.querySelector(".item-price").textContent = "US$" + producto.precio
+        clone.querySelector(".product-detail").dataset.cat = producto.categoria
+        clone.querySelector("img").src = "/productos_imagenes/" + producto.id + ".png"
 
-      clone.querySelector("a").textContent = producto.nombre
-      clone.querySelector(".item-price").textContent = "US$" + producto.precio
-      clone.querySelector(".product-detail").dataset.cat = producto.categoria
-      clone.querySelector("img").src = "/productos_imagenes/" + producto.id + ".png"
+        clone.querySelector(".cart-concern").addEventListener('click', () => {
+          let cart = localStorage.getItem('cart');
+          if (cart === null) {
+            cart = {}
+          } else {
+            cart = JSON.parse(cart)
+          }
 
-      const elem = listaProductos.appendChild(clone);
-    }
+          if (cart[producto.id] === undefined) {
+            cart[producto.id] = 1
+          } else {
+            cart[producto.id] += 1
+          }
 
-    PRODUCTOS.forEach((producto) => {
-      crearProducto(producto);
-    })
+          localStorage.setItem('cart', JSON.stringify(cart))
+        })
+
+        listaProductos.appendChild(clone);
+      }
+
+      PRODUCTOS.forEach((producto) => {
+        crearProducto(producto);
+      })
 
 
-    actualizarProductos();
+      actualizarProductos();
 
-    function actualizarProductos() {
-      let selectedCategories = 0;
+      function actualizarProductos() {
+        let selectedCategories = 0;
 
-      if (categoriasEscogidas[0] === true) {
-        for (let i = 1; i < listaProductos.children.length; i++) {
-          listaProductos.children[i].classList.remove('hide');
-        }
-      } else {
-        for (categoria in categoriasEscogidas) {
-          let productos = listaProductos.querySelectorAll("[data-cat=\"" + categoria + "\"]")
+        if (categoriasEscogidas[0] === true) {
+          for (let i = 1; i < listaProductos.children.length; i++) {
+            listaProductos.children[i].classList.remove('hide');
+          }
+        } else {
+          for (categoria in categoriasEscogidas) {
+            let productos = listaProductos.querySelectorAll("[data-cat=\"" + categoria + "\"]")
 
-          if (productos.length === 0) continue;
+            if (productos.length === 0) continue;
 
-          for (let i = 0; i < productos.length; i++) {
-            const producto = productos[i];
+            for (let i = 0; i < productos.length; i++) {
+              const producto = productos[i];
 
-            if (categoriasEscogidas[+categoria] === false) {
-              producto.parentElement.classList.add('hide')
-            } else {
-              producto.parentElement.classList.remove('hide')
-              selectedCategories++;
+              if (categoriasEscogidas[+categoria] === false) {
+                producto.parentElement.classList.add('hide')
+              } else {
+                producto.parentElement.classList.remove('hide')
+                selectedCategories++;
+              }
             }
           }
         }
-      }
 
-      if (selectedCategories === 0) {
-        for (let i = 1; i < listaProductos.children.length; i++) {
-          listaProductos.children[i].classList.remove('hide');
+        if (selectedCategories === 0) {
+          for (let i = 1; i < listaProductos.children.length; i++) {
+            listaProductos.children[i].classList.remove('hide');
+          }
+          categoriasEscogidas[0] = true;
         }
-        categoriasEscogidas[0] = true;
       }
-    }
 
 
-  </script>
+    </script>
 </body>
 
 </html>

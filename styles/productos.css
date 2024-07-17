@@ -56,6 +56,7 @@ i.icon.icon-arrow-io {
   justify-content: center;
   align-items: center;
   gap: 36px;
+  padding: 24px;
 }
 
 .product-item .cart-concern {
@@ -103,4 +104,15 @@ h3.product-title {
 
 .hide {
   display: none;
+}
+
+#shop {
+  display: flex;
+}
+
+.categorias-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 140px;
+  padding-left: 6px;
 }

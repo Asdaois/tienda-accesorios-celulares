@@ -66,7 +66,6 @@ const PRODUCTOS = [
     precio: "14.43",
     categoria: 2,
   },
-  { id: 9, nombre: "", precio: "", categoria: 2 },
   {
     id: 9,
     nombre:
