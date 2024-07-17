@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="icon" type="image/svg+xml" href="./public/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./styles/style.css">
   <link rel="stylesheet" href="./styles/productos.css">
@@ -12,25 +12,25 @@
 
 <body style="min-height: 100vh;">
   <header class="container" id="header-principal">
-    <div class="logo">Todo Telefono</div>
+    <div class="logo"><img src="./public/logo.png" alt=""></div>
     <nav id="header-pages">
-      <a href="/index.html">Inicio</a>
-      <a href="/contactenos.html">Contáctenos</a>
-      <a href="/productos.html" class="active">Productos</a>
-      <a href="/carrito.html">Carrito</a>
+      <a href="./index.html">Inicio</a>
+      <a href="./contactenos.html">Contáctenos</a>
+      <a href="./productos.html" class="active">Productos</a>
+      <a href="./carrito.html">Carrito</a>
     </nav>
   </header>
   <section id="page-banner">
     <h1>Productos</h1>
     <div class="breadcrumbs">
       <span>
-        <a href="/index.html">Inicio /</a>
+        <a href="./index.html">Inicio /</a>
       </span>
       <span>Productos</span>
     </div>
   </section>
 
-  <div class="container" id="shop">
+  <main class="container" id="shop">
     <div class="categorias-sidebar">
       <h3>Categorias</h3>
       <div id="categorias-selector">
@@ -41,7 +41,7 @@
       <template id="product-template">
         <div class="product-item">
           <div class="image-holder">
-            <img src="/productos_imagenes/1.png" alt="Books" class="product-image">
+            <img src="./public/productos_imagenes/1.png" alt="Books" class="product-image">
           </div>
           <div class="cart-concern">
             <div class="cart-button d-flex justify-content-between align-items-center">
@@ -63,8 +63,7 @@
     <footer>
 
     </footer>
-    <script type="module" src="/main.js"></script>
-    <script src="/scripts/datos.js"></script>
+    <script src="./scripts/datos.js"></script>
     <script>
       const categoriasSelector = document.querySelector('#categorias-selector')
       const listaProductos = document.querySelector('#lista-productos')
@@ -118,7 +117,7 @@
         clone.querySelector("a").textContent = producto.nombre
         clone.querySelector(".item-price").textContent = "US$" + producto.precio
         clone.querySelector(".product-detail").dataset.cat = producto.categoria
-        clone.querySelector("img").src = "/productos_imagenes/" + producto.id + ".png"
+        clone.querySelector("img").src = "./public/productos_imagenes/" + producto.id + ".png"
 
         clone.querySelector(".cart-concern").addEventListener('click', () => {
           let cart = localStorage.getItem('cart');

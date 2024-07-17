@@ -11,12 +11,12 @@
 
 <body style="min-height: 100vh;">
   <header class="container" id="header-principal">
-    <div class="logo">Todo Telefono</div>
+    <div class="logo"><img src="./public/logo.png" alt=""></div>
     <nav id="header-pages">
-      <a href="/index.html">Inicio</a>
-      <a href="/contactenos.html">Contáctenos</a>
-      <a href="/productos.html">Productos</a>
-      <a href="/carrito.html" class="active">Carrito</a>
+      <a href="./index.html">Inicio</a>
+      <a href="./contactenos.html">Contáctenos</a>
+      <a href="./productos.html">Productos</a>
+      <a href="./carrito.html" class="active">Carrito</a>
     </nav>
   </header>
   <section id="page-banner">
@@ -34,6 +34,7 @@
   <main class="container">
     <section id="cart-resume">
       <h5 class="">Subtotal (<span class="cart-amount">0</span> productos): <span id="cart-to-pay">$000</span></h5>
+      <a href="#checkout" class="btn">Pagar</a>
     </section>
 
     <h4>Productos en el Carrito</h4>
@@ -64,11 +65,37 @@
         </article>
       </template>
     </section>
+
+    <section id="checkout">
+      <h3>Detalles del Pago</h3>
+      <div class="checkout-detail">
+        <span>Subtotal: </span>
+        <span class="subtotal"></span>
+      </div>
+      <div class="checkout-detail">
+        <span>Costo Envió: </span>
+        <span>GRATIS</span>
+      </div>
+      <div class="checkout-detail">
+        <span>Impuesto: </span>
+        <span>Calculado al pagar</span>
+      </div>
+      <hr>
+      <div class="checkout-detail">
+        <span>Total: </span>
+        <span class="subtotal"></span>
+      </div>
+
+      <button>Pagar</button>
+      <div id=“Yappy_Checkout_Button”></div>
+    </section>
+
   </main>
   <footer>
   </footer>
-  <script type="module" src="/main.js"></script>
-  <script src="/scripts/datos.js"></script>
+  <script src="./scripts/datos.js"></script>
+  <script>
+  </script>
   <script>
     const cart = JSON.parse(localStorage.getItem('cart'));
     const CART_PRODUCT_TEMPLATE = document.querySelector("#producto-carrito-template")
@@ -87,7 +114,10 @@
         if (cart[item] !== 0) {
           numeroProductos++;
           let clone = CART_PRODUCT_TEMPLATE.content.cloneNode(true);
-          clone.querySelector('img').src = "/productos_imagenes/" + PRODUCTOS[item].id + '.png'
+          if (PRODUCTOS[item] === undefined) {
+            continue
+          }
+          clone.querySelector('img').src = "./public/productos_imagenes/" + PRODUCTOS[item].id + '.png'
           clone.querySelector('h5').textContent = PRODUCTOS[item].nombre
           clone.querySelector('.cart-amount').textContent = cart[item]
 
@@ -120,14 +150,28 @@
 
       document.querySelector('.cart-amount').textContent = numeroProductos
       document.querySelector('#cart-to-pay').textContent = "$" + subTotal.toFixed(2)
-    }
 
+      document.querySelectorAll('.subtotal').forEach((nodo) => {
+        nodo.textContent = "$" + subTotal.toFixed(2)
+      })
+    }
   </script>
 </body>
 
 <style>
   main {
     padding: 36px;
+  }
+
+  #cart-resume {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  #cart-resume .btn {
+    margin: 20px;
+    padding: 12px 20px;
   }
 
   .producto-carrito {
@@ -148,13 +192,28 @@
 
   .producto-carrito-detalles {
     flex-grow: 1;
+    width: 400px;
   }
 
   .producto-carrito .precio {
+    width: 100px;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  #checkout {
+    margin: 0 auto;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .checkout-detail {
+    display: flex;
+    justify-content: space-between;
   }
 </style>
 

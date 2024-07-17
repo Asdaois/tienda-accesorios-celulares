@@ -524,7 +524,7 @@ fieldset[disabled] a.btn {
   text-align: center;
 
   /* The image used */
-  background-image: url("site-banner.jpg");
+  background-image: url("../public/site-banner.png");
 
   /* Create the parallax scrolling effect */
   background-attachment: fixed;
@@ -587,4 +587,19 @@ fieldset[disabled] a.btn {
 
 .text-primary {
   color: var(--primary-color) !important;
+}
+
+.logo {
+  position: relative;
+  width: 150px;
+}
+
+.logo img {
+  position: absolute;
+  top: -60%;
+  z-index: 10;
+}
+
+main {
+  padding: 20px
 }
