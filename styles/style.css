@@ -603,3 +603,10 @@ fieldset[disabled] a.btn {
 main {
   padding: 20px
 }
+
+footer {
+  margin: 0 auto;
+  padding-top: 20px;
+  padding-left: 20px;
+  border-top: 2px solid #ddd;
+}
